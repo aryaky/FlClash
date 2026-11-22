@@ -89,9 +89,7 @@ class TrafficStatsView extends ConsumerWidget {
               ),
               sliver: SliverMainAxisGroup(
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: _TrafficSummary(summary: summary),
-                  ),
+                  SliverToBoxAdapter(child: _TrafficSummary(summary: summary)),
                   generateSliverSection(
                     title: appLocalizations.subscriptionInfo,
                     items: items,
