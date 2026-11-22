@@ -32,6 +32,11 @@ class Navigation implements NavigationPort {
         builder: (_) => const ProfilesView(),
       ),
       NavigationItem(
+        glyph: AppGlyphs.radar,
+        label: PageLabel.trafficStats,
+        builder: (_) => const TrafficStatsView(),
+      ),
+      NavigationItem(
         glyph: AppGlyphs.requests,
         label: PageLabel.requests,
         builder: (_) => const RequestsView(),
