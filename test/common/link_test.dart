@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/link.dart';
+import 'package:fl_clash/common/protocol.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -37,7 +38,7 @@ void main() {
   test('an install-config link reports its url', () async {
     await listen();
 
-    await emit('flclash://install-config?url=https://example.com/a.yaml');
+    await emit('flclashtest://install-config?url=https://example.com/a.yaml');
 
     expect(received, ['https://example.com/a.yaml']);
   });
@@ -45,7 +46,7 @@ void main() {
   test('an install-config link without a url is ignored', () async {
     await listen();
 
-    await emit('flclash://install-config');
+    await emit('flclashtest://install-config');
 
     expect(received, isEmpty);
   });
@@ -53,8 +54,8 @@ void main() {
   test('an install-config link with a blank url is ignored', () async {
     await listen();
 
-    await emit('flclash://install-config?url=');
-    await emit('flclash://install-config?url=%20');
+    await emit('flclashtest://install-config?url=');
+    await emit('flclashtest://install-config?url=%20');
 
     expect(received, isEmpty);
   });
@@ -62,7 +63,7 @@ void main() {
   test('a link for another host is ignored', () async {
     await listen();
 
-    await emit('flclash://open-profile?url=https://example.com/a.yaml');
+    await emit('flclashtest://open-profile?url=https://example.com/a.yaml');
 
     expect(received, isEmpty);
   });
@@ -75,7 +76,7 @@ void main() {
 
     expect(linkManager.subscription, isNot(same(first)));
 
-    await emit('flclash://install-config?url=https://example.com/a.yaml');
+    await emit('flclashtest://install-config?url=https://example.com/a.yaml');
 
     expect(received, ['https://example.com/a.yaml']);
   });
@@ -107,13 +108,13 @@ void main() {
       final calls = <String>[];
       messenger.setMockMethodCallHandler(channel, (call) async {
         calls.add(call.method);
-        return ['flclash://install-config?url=https://example.com/a.yaml'];
+        return ['flclashtest://install-config?url=https://example.com/a.yaml'];
       });
       final uris = <Uri>[];
       final subscription = androidLinks(channel).listen(uris.add);
       await pumpEventQueue();
 
-      await push('flclash://install-config?url=https://example.com/b.yaml');
+      await push('flclashtest://install-config?url=https://example.com/b.yaml');
       await pumpEventQueue();
 
       expect(calls, ['takeLinks']);
@@ -130,7 +131,7 @@ void main() {
 
     linkManager.destroy();
     linkManager.destroy();
-    await emit('flclash://install-config?url=https://example.com/a.yaml');
+    await emit('flclashtest://install-config?url=https://example.com/a.yaml');
 
     expect(linkManager.subscription, isNull);
     expect(received, isEmpty);
@@ -145,7 +146,7 @@ void main() {
     });
 
     test('unwraps the url of an install-config link for every scheme', () {
-      for (final scheme in ['clash', 'clashmeta', 'flclash']) {
+      for (final scheme in protocolSchemes) {
         expect(
           profileUrlFromQrCodes([
             '$scheme://install-config?url=https%3A%2F%2Fexample.com%2Fa.yaml',
@@ -162,8 +163,8 @@ void main() {
           '',
           'plain text',
           'https://',
-          'clash://install-config?url=not-a-url',
-          'clash://open-profile?url=https://example.com/a.yaml',
+          'clashtest://install-config?url=not-a-url',
+          'clashtest://open-profile?url=https://example.com/a.yaml',
           'other://install-config?url=https://example.com/a.yaml',
         ]),
         isNull,
@@ -184,7 +185,7 @@ void main() {
       expect(
         profileUrlFromQrCodes([
           'plain text',
-          'flclash://install-config?url=https://example.com/first.yaml',
+          'flclashtest://install-config?url=https://example.com/first.yaml',
           'https://example.com/second.yaml',
         ]),
         'https://example.com/first.yaml',

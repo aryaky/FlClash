@@ -131,7 +131,7 @@ void main() {
       final (status, _) = await _request(
         receiver.address,
         method: 'POST',
-        link: 'clash://install-config?url=${Uri.encodeQueryComponent(url)}',
+        link: 'clashtest://install-config?url=${Uri.encodeQueryComponent(url)}',
       );
       expect(status, HttpStatus.ok);
       expect(await receiver.link, url);
