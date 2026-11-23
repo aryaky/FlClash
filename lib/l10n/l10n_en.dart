@@ -45,6 +45,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trafficUsage => 'Traffic usage';
 
   @override
+  String get measuredTraffic => 'Measured traffic';
+
+  @override
+  String get measuredTrafficNote =>
+      'Only traffic that passed through this device\'s core is counted, accumulated since this version was installed. Airport bills may differ because of core overhead or other devices — that difference is exactly what reconciliation reveals.';
+
+  @override
+  String get destinations => 'Destinations';
+
+  @override
   String get networkSpeed => 'Network speed';
 
   @override

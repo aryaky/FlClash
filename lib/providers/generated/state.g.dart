@@ -3918,3 +3918,204 @@ final class ProfileProvidersProvider
 }
 
 String _$profileProvidersHash() => r'689856f32a4b40e6a26b1eedd16db418d140371a';
+
+@ProviderFor(trafficDays)
+final trafficDaysProvider = TrafficDaysProvider._();
+
+final class TrafficDaysProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<TrafficDayTotal>>,
+          List<TrafficDayTotal>,
+          FutureOr<List<TrafficDayTotal>>
+        >
+    with
+        $FutureModifier<List<TrafficDayTotal>>,
+        $FutureProvider<List<TrafficDayTotal>> {
+  TrafficDaysProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trafficDaysProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trafficDaysHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<TrafficDayTotal>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<TrafficDayTotal>> create(Ref ref) {
+    return trafficDays(ref);
+  }
+}
+
+String _$trafficDaysHash() => r'df03fd8f890712397451be40e9a8326d700b75b7';
+
+@ProviderFor(trafficDayProfiles)
+final trafficDayProfilesProvider = TrafficDayProfilesFamily._();
+
+final class TrafficDayProfilesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<TrafficProfileTotal>>,
+          List<TrafficProfileTotal>,
+          FutureOr<List<TrafficProfileTotal>>
+        >
+    with
+        $FutureModifier<List<TrafficProfileTotal>>,
+        $FutureProvider<List<TrafficProfileTotal>> {
+  TrafficDayProfilesProvider._({
+    required TrafficDayProfilesFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'trafficDayProfilesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$trafficDayProfilesHash();
+
+  @override
+  String toString() {
+    return r'trafficDayProfilesProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<TrafficProfileTotal>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<TrafficProfileTotal>> create(Ref ref) {
+    final argument = this.argument as String;
+    return trafficDayProfiles(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TrafficDayProfilesProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$trafficDayProfilesHash() =>
+    r'92c677a24093b70a83c64613df03bae19d1243b4';
+
+final class TrafficDayProfilesFamily extends $Family
+    with
+        $FunctionalFamilyOverride<FutureOr<List<TrafficProfileTotal>>, String> {
+  TrafficDayProfilesFamily._()
+    : super(
+        retry: null,
+        name: r'trafficDayProfilesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  TrafficDayProfilesProvider call(String statDate) =>
+      TrafficDayProfilesProvider._(argument: statDate, from: this);
+
+  @override
+  String toString() => r'trafficDayProfilesProvider';
+}
+
+@ProviderFor(trafficDayHosts)
+final trafficDayHostsProvider = TrafficDayHostsFamily._();
+
+final class TrafficDayHostsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<TrafficHostTotal>>,
+          List<TrafficHostTotal>,
+          FutureOr<List<TrafficHostTotal>>
+        >
+    with
+        $FutureModifier<List<TrafficHostTotal>>,
+        $FutureProvider<List<TrafficHostTotal>> {
+  TrafficDayHostsProvider._({
+    required TrafficDayHostsFamily super.from,
+    required ({int profileId, String statDate}) super.argument,
+  }) : super(
+         retry: null,
+         name: r'trafficDayHostsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$trafficDayHostsHash();
+
+  @override
+  String toString() {
+    return r'trafficDayHostsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<TrafficHostTotal>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<TrafficHostTotal>> create(Ref ref) {
+    final argument = this.argument as ({int profileId, String statDate});
+    return trafficDayHosts(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TrafficDayHostsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$trafficDayHostsHash() => r'76b61739a620f35f5b127f58c10bf26c9ed33fc5';
+
+final class TrafficDayHostsFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<List<TrafficHostTotal>>,
+          ({int profileId, String statDate})
+        > {
+  TrafficDayHostsFamily._()
+    : super(
+        retry: null,
+        name: r'trafficDayHostsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  TrafficDayHostsProvider call(({int profileId, String statDate}) key) =>
+      TrafficDayHostsProvider._(argument: key, from: this);
+
+  @override
+  String toString() => r'trafficDayHostsProvider';
+}

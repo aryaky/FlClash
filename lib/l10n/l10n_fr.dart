@@ -45,6 +45,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get trafficUsage => 'Trafic utilisé';
 
   @override
+  String get measuredTraffic => 'Trafic mesuré';
+
+  @override
+  String get measuredTrafficNote =>
+      'Seul le trafic passé par le core de cet appareil est compté, cumulé depuis l\'installation de cette version. Les factures du fournisseur peuvent différer à cause de la surcharge du core ou d\'autres appareils : c\'est exactement ce que montre le rapprochement.';
+
+  @override
+  String get destinations => 'Destinations';
+
+  @override
   String get networkSpeed => 'Débit réseau';
 
   @override

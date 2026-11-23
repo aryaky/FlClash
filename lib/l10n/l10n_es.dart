@@ -45,6 +45,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get trafficUsage => 'Uso de tráfico';
 
   @override
+  String get measuredTraffic => 'Tráfico medido';
+
+  @override
+  String get measuredTrafficNote =>
+      'Solo se cuenta el tráfico que pasó por el core de este dispositivo, acumulado desde la instalación de esta versión. Las facturas del proveedor pueden diferir por la sobrecarga del core o por otros dispositivos: esa diferencia es justamente lo que muestra la conciliación.';
+
+  @override
+  String get destinations => 'Destinos';
+
+  @override
   String get networkSpeed => 'Velocidad de red';
 
   @override

@@ -45,6 +45,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get trafficUsage => 'Статистика трафика';
 
   @override
+  String get measuredTraffic => 'Измеренный трафик';
+
+  @override
+  String get measuredTrafficNote =>
+      'Учитывается только трафик, прошедший через core этого устройства, накопление с момента установки этой версии. Счета провайдера могут отличаться из-за накладных расходов core и других устройств — именно это и показывает сверка.';
+
+  @override
+  String get destinations => 'Назначения';
+
+  @override
   String get networkSpeed => 'Скорость сети';
 
   @override

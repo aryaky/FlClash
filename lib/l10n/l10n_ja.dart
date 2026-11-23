@@ -45,6 +45,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trafficUsage => 'トラフィック統計';
 
   @override
+  String get measuredTraffic => '実測トラフィック';
+
+  @override
+  String get measuredTrafficNote =>
+      'このデバイスの core を通過したトラフィックのみを、このバージョンのインストール以降累計しています。core のオーバーヘッドや他端末の利用によりプロバイダの請求と差異が出ることがあります。その差異を確認することが照合の目的です。';
+
+  @override
+  String get destinations => '接続先';
+
+  @override
   String get networkSpeed => 'ネットワーク速度';
 
   @override

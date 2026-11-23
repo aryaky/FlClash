@@ -5453,6 +5453,414 @@ class MitmModulesCompanion extends UpdateCompanion<RawMitmModule> {
   }
 }
 
+class $TrafficStatsTable extends TrafficStats
+    with TableInfo<$TrafficStatsTable, TrafficStatRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrafficStatsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _statDateMeta = const VerificationMeta(
+    'statDate',
+  );
+  @override
+  late final GeneratedColumn<String> statDate = GeneratedColumn<String>(
+    'stat_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileIdMeta = const VerificationMeta(
+    'profileId',
+  );
+  @override
+  late final GeneratedColumn<int> profileId = GeneratedColumn<int>(
+    'profile_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _destKeyMeta = const VerificationMeta(
+    'destKey',
+  );
+  @override
+  late final GeneratedColumn<String> destKey = GeneratedColumn<String>(
+    'dest_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileNameMeta = const VerificationMeta(
+    'profileName',
+  );
+  @override
+  late final GeneratedColumn<String> profileName = GeneratedColumn<String>(
+    'profile_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _upMeta = const VerificationMeta('up');
+  @override
+  late final GeneratedColumn<int> up = GeneratedColumn<int>(
+    'up',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _downMeta = const VerificationMeta('down');
+  @override
+  late final GeneratedColumn<int> down = GeneratedColumn<int>(
+    'down',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    statDate,
+    profileId,
+    destKey,
+    profileName,
+    up,
+    down,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'traffic_stats';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrafficStatRecord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('stat_date')) {
+      context.handle(
+        _statDateMeta,
+        statDate.isAcceptableOrUnknown(data['stat_date']!, _statDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statDateMeta);
+    }
+    if (data.containsKey('profile_id')) {
+      context.handle(
+        _profileIdMeta,
+        profileId.isAcceptableOrUnknown(data['profile_id']!, _profileIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_profileIdMeta);
+    }
+    if (data.containsKey('dest_key')) {
+      context.handle(
+        _destKeyMeta,
+        destKey.isAcceptableOrUnknown(data['dest_key']!, _destKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_destKeyMeta);
+    }
+    if (data.containsKey('profile_name')) {
+      context.handle(
+        _profileNameMeta,
+        profileName.isAcceptableOrUnknown(
+          data['profile_name']!,
+          _profileNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('up')) {
+      context.handle(_upMeta, up.isAcceptableOrUnknown(data['up']!, _upMeta));
+    }
+    if (data.containsKey('down')) {
+      context.handle(
+        _downMeta,
+        down.isAcceptableOrUnknown(data['down']!, _downMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {statDate, profileId, destKey};
+  @override
+  TrafficStatRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrafficStatRecord(
+      statDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stat_date'],
+      )!,
+      profileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}profile_id'],
+      )!,
+      destKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}dest_key'],
+      )!,
+      profileName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}profile_name'],
+      )!,
+      up: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}up'],
+      )!,
+      down: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}down'],
+      )!,
+    );
+  }
+
+  @override
+  $TrafficStatsTable createAlias(String alias) {
+    return $TrafficStatsTable(attachedDatabase, alias);
+  }
+}
+
+class TrafficStatRecord extends DataClass
+    implements Insertable<TrafficStatRecord> {
+  final String statDate;
+  final int profileId;
+  final String destKey;
+  final String profileName;
+  final int up;
+  final int down;
+  const TrafficStatRecord({
+    required this.statDate,
+    required this.profileId,
+    required this.destKey,
+    required this.profileName,
+    required this.up,
+    required this.down,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['stat_date'] = Variable<String>(statDate);
+    map['profile_id'] = Variable<int>(profileId);
+    map['dest_key'] = Variable<String>(destKey);
+    map['profile_name'] = Variable<String>(profileName);
+    map['up'] = Variable<int>(up);
+    map['down'] = Variable<int>(down);
+    return map;
+  }
+
+  TrafficStatsCompanion toCompanion(bool nullToAbsent) {
+    return TrafficStatsCompanion(
+      statDate: Value(statDate),
+      profileId: Value(profileId),
+      destKey: Value(destKey),
+      profileName: Value(profileName),
+      up: Value(up),
+      down: Value(down),
+    );
+  }
+
+  factory TrafficStatRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrafficStatRecord(
+      statDate: serializer.fromJson<String>(json['statDate']),
+      profileId: serializer.fromJson<int>(json['profileId']),
+      destKey: serializer.fromJson<String>(json['destKey']),
+      profileName: serializer.fromJson<String>(json['profileName']),
+      up: serializer.fromJson<int>(json['up']),
+      down: serializer.fromJson<int>(json['down']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'statDate': serializer.toJson<String>(statDate),
+      'profileId': serializer.toJson<int>(profileId),
+      'destKey': serializer.toJson<String>(destKey),
+      'profileName': serializer.toJson<String>(profileName),
+      'up': serializer.toJson<int>(up),
+      'down': serializer.toJson<int>(down),
+    };
+  }
+
+  TrafficStatRecord copyWith({
+    String? statDate,
+    int? profileId,
+    String? destKey,
+    String? profileName,
+    int? up,
+    int? down,
+  }) => TrafficStatRecord(
+    statDate: statDate ?? this.statDate,
+    profileId: profileId ?? this.profileId,
+    destKey: destKey ?? this.destKey,
+    profileName: profileName ?? this.profileName,
+    up: up ?? this.up,
+    down: down ?? this.down,
+  );
+  TrafficStatRecord copyWithCompanion(TrafficStatsCompanion data) {
+    return TrafficStatRecord(
+      statDate: data.statDate.present ? data.statDate.value : this.statDate,
+      profileId: data.profileId.present ? data.profileId.value : this.profileId,
+      destKey: data.destKey.present ? data.destKey.value : this.destKey,
+      profileName: data.profileName.present
+          ? data.profileName.value
+          : this.profileName,
+      up: data.up.present ? data.up.value : this.up,
+      down: data.down.present ? data.down.value : this.down,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrafficStatRecord(')
+          ..write('statDate: $statDate, ')
+          ..write('profileId: $profileId, ')
+          ..write('destKey: $destKey, ')
+          ..write('profileName: $profileName, ')
+          ..write('up: $up, ')
+          ..write('down: $down')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(statDate, profileId, destKey, profileName, up, down);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrafficStatRecord &&
+          other.statDate == this.statDate &&
+          other.profileId == this.profileId &&
+          other.destKey == this.destKey &&
+          other.profileName == this.profileName &&
+          other.up == this.up &&
+          other.down == this.down);
+}
+
+class TrafficStatsCompanion extends UpdateCompanion<TrafficStatRecord> {
+  final Value<String> statDate;
+  final Value<int> profileId;
+  final Value<String> destKey;
+  final Value<String> profileName;
+  final Value<int> up;
+  final Value<int> down;
+  final Value<int> rowid;
+  const TrafficStatsCompanion({
+    this.statDate = const Value.absent(),
+    this.profileId = const Value.absent(),
+    this.destKey = const Value.absent(),
+    this.profileName = const Value.absent(),
+    this.up = const Value.absent(),
+    this.down = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TrafficStatsCompanion.insert({
+    required String statDate,
+    required int profileId,
+    required String destKey,
+    this.profileName = const Value.absent(),
+    this.up = const Value.absent(),
+    this.down = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : statDate = Value(statDate),
+       profileId = Value(profileId),
+       destKey = Value(destKey);
+  static Insertable<TrafficStatRecord> custom({
+    Expression<String>? statDate,
+    Expression<int>? profileId,
+    Expression<String>? destKey,
+    Expression<String>? profileName,
+    Expression<int>? up,
+    Expression<int>? down,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (statDate != null) 'stat_date': statDate,
+      if (profileId != null) 'profile_id': profileId,
+      if (destKey != null) 'dest_key': destKey,
+      if (profileName != null) 'profile_name': profileName,
+      if (up != null) 'up': up,
+      if (down != null) 'down': down,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TrafficStatsCompanion copyWith({
+    Value<String>? statDate,
+    Value<int>? profileId,
+    Value<String>? destKey,
+    Value<String>? profileName,
+    Value<int>? up,
+    Value<int>? down,
+    Value<int>? rowid,
+  }) {
+    return TrafficStatsCompanion(
+      statDate: statDate ?? this.statDate,
+      profileId: profileId ?? this.profileId,
+      destKey: destKey ?? this.destKey,
+      profileName: profileName ?? this.profileName,
+      up: up ?? this.up,
+      down: down ?? this.down,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (statDate.present) {
+      map['stat_date'] = Variable<String>(statDate.value);
+    }
+    if (profileId.present) {
+      map['profile_id'] = Variable<int>(profileId.value);
+    }
+    if (destKey.present) {
+      map['dest_key'] = Variable<String>(destKey.value);
+    }
+    if (profileName.present) {
+      map['profile_name'] = Variable<String>(profileName.value);
+    }
+    if (up.present) {
+      map['up'] = Variable<int>(up.value);
+    }
+    if (down.present) {
+      map['down'] = Variable<int>(down.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrafficStatsCompanion(')
+          ..write('statDate: $statDate, ')
+          ..write('profileId: $profileId, ')
+          ..write('destKey: $destKey, ')
+          ..write('profileName: $profileName, ')
+          ..write('up: $up, ')
+          ..write('down: $down, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
@@ -5468,6 +5876,7 @@ abstract class _$Database extends GeneratedDatabase {
   late final $ProxyDialersTable proxyDialers = $ProxyDialersTable(this);
   late final $IpQualitiesTable ipQualities = $IpQualitiesTable(this);
   late final $MitmModulesTable mitmModules = $MitmModulesTable(this);
+  late final $TrafficStatsTable trafficStats = $TrafficStatsTable(this);
   late final Index idxRuleTarget = Index(
     'idx_rule_target',
     'CREATE INDEX idx_rule_target ON rules (rule_target)',
@@ -5501,6 +5910,9 @@ abstract class _$Database extends GeneratedDatabase {
   );
   late final IpQualitiesDao ipQualitiesDao = IpQualitiesDao(this as Database);
   late final MitmModulesDao mitmModulesDao = MitmModulesDao(this as Database);
+  late final TrafficStatsDao trafficStatsDao = TrafficStatsDao(
+    this as Database,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5518,6 +5930,7 @@ abstract class _$Database extends GeneratedDatabase {
     proxyDialers,
     ipQualities,
     mitmModules,
+    trafficStats,
     idxRuleTarget,
     idxRulesProfileOrder,
     idxProxyGroupsProfileOrder,
@@ -9710,6 +10123,236 @@ typedef $$MitmModulesTableProcessedTableManager =
       RawMitmModule,
       PrefetchHooks Function()
     >;
+typedef $$TrafficStatsTableCreateCompanionBuilder =
+    TrafficStatsCompanion Function({
+      required String statDate,
+      required int profileId,
+      required String destKey,
+      Value<String> profileName,
+      Value<int> up,
+      Value<int> down,
+      Value<int> rowid,
+    });
+typedef $$TrafficStatsTableUpdateCompanionBuilder =
+    TrafficStatsCompanion Function({
+      Value<String> statDate,
+      Value<int> profileId,
+      Value<String> destKey,
+      Value<String> profileName,
+      Value<int> up,
+      Value<int> down,
+      Value<int> rowid,
+    });
+
+class $$TrafficStatsTableFilterComposer
+    extends Composer<_$Database, $TrafficStatsTable> {
+  $$TrafficStatsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get statDate => $composableBuilder(
+    column: $table.statDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get profileId => $composableBuilder(
+    column: $table.profileId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get destKey => $composableBuilder(
+    column: $table.destKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get profileName => $composableBuilder(
+    column: $table.profileName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get up => $composableBuilder(
+    column: $table.up,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get down => $composableBuilder(
+    column: $table.down,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrafficStatsTableOrderingComposer
+    extends Composer<_$Database, $TrafficStatsTable> {
+  $$TrafficStatsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get statDate => $composableBuilder(
+    column: $table.statDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get profileId => $composableBuilder(
+    column: $table.profileId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get destKey => $composableBuilder(
+    column: $table.destKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get profileName => $composableBuilder(
+    column: $table.profileName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get up => $composableBuilder(
+    column: $table.up,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get down => $composableBuilder(
+    column: $table.down,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrafficStatsTableAnnotationComposer
+    extends Composer<_$Database, $TrafficStatsTable> {
+  $$TrafficStatsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get statDate =>
+      $composableBuilder(column: $table.statDate, builder: (column) => column);
+
+  GeneratedColumn<int> get profileId =>
+      $composableBuilder(column: $table.profileId, builder: (column) => column);
+
+  GeneratedColumn<String> get destKey =>
+      $composableBuilder(column: $table.destKey, builder: (column) => column);
+
+  GeneratedColumn<String> get profileName => $composableBuilder(
+    column: $table.profileName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get up =>
+      $composableBuilder(column: $table.up, builder: (column) => column);
+
+  GeneratedColumn<int> get down =>
+      $composableBuilder(column: $table.down, builder: (column) => column);
+}
+
+class $$TrafficStatsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $TrafficStatsTable,
+          TrafficStatRecord,
+          $$TrafficStatsTableFilterComposer,
+          $$TrafficStatsTableOrderingComposer,
+          $$TrafficStatsTableAnnotationComposer,
+          $$TrafficStatsTableCreateCompanionBuilder,
+          $$TrafficStatsTableUpdateCompanionBuilder,
+          (
+            TrafficStatRecord,
+            BaseReferences<_$Database, $TrafficStatsTable, TrafficStatRecord>,
+          ),
+          TrafficStatRecord,
+          PrefetchHooks Function()
+        > {
+  $$TrafficStatsTableTableManager(_$Database db, $TrafficStatsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrafficStatsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TrafficStatsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TrafficStatsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> statDate = const Value.absent(),
+                Value<int> profileId = const Value.absent(),
+                Value<String> destKey = const Value.absent(),
+                Value<String> profileName = const Value.absent(),
+                Value<int> up = const Value.absent(),
+                Value<int> down = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TrafficStatsCompanion(
+                statDate: statDate,
+                profileId: profileId,
+                destKey: destKey,
+                profileName: profileName,
+                up: up,
+                down: down,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String statDate,
+                required int profileId,
+                required String destKey,
+                Value<String> profileName = const Value.absent(),
+                Value<int> up = const Value.absent(),
+                Value<int> down = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TrafficStatsCompanion.insert(
+                statDate: statDate,
+                profileId: profileId,
+                destKey: destKey,
+                profileName: profileName,
+                up: up,
+                down: down,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$TrafficStatsTable, TrafficStatRecord>(table),
+                  BaseReferences<
+                    _$Database,
+                    $TrafficStatsTable,
+                    TrafficStatRecord
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrafficStatsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $TrafficStatsTable,
+      TrafficStatRecord,
+      $$TrafficStatsTableFilterComposer,
+      $$TrafficStatsTableOrderingComposer,
+      $$TrafficStatsTableAnnotationComposer,
+      $$TrafficStatsTableCreateCompanionBuilder,
+      $$TrafficStatsTableUpdateCompanionBuilder,
+      (
+        TrafficStatRecord,
+        BaseReferences<_$Database, $TrafficStatsTable, TrafficStatRecord>,
+      ),
+      TrafficStatRecord,
+      PrefetchHooks Function()
+    >;
 
 class $DatabaseManager {
   final _$Database _db;
@@ -9738,6 +10381,8 @@ class $DatabaseManager {
       $$IpQualitiesTableTableManager(_db, _db.ipQualities);
   $$MitmModulesTableTableManager get mitmModules =>
       $$MitmModulesTableTableManager(_db, _db.mitmModules);
+  $$TrafficStatsTableTableManager get trafficStats =>
+      $$TrafficStatsTableTableManager(_db, _db.trafficStats);
 }
 
 mixin _$ProfilesDaoMixin on DatabaseAccessor<Database> {
@@ -9888,4 +10533,16 @@ class MitmModulesDaoManager {
   MitmModulesDaoManager(this._db);
   $$MitmModulesTableTableManager get mitmModules =>
       $$MitmModulesTableTableManager(_db.attachedDatabase, _db.mitmModules);
+}
+
+mixin _$TrafficStatsDaoMixin on DatabaseAccessor<Database> {
+  $TrafficStatsTable get trafficStats => attachedDatabase.trafficStats;
+  TrafficStatsDaoManager get managers => TrafficStatsDaoManager(this);
+}
+
+class TrafficStatsDaoManager {
+  final _$TrafficStatsDaoMixin _db;
+  TrafficStatsDaoManager(this._db);
+  $$TrafficStatsTableTableManager get trafficStats =>
+      $$TrafficStatsTableTableManager(_db.attachedDatabase, _db.trafficStats);
 }

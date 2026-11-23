@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/core.dart';
+import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/manager/traffic_accounting.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/action.dart';
 import 'package:fl_clash/providers/app.dart';
@@ -28,6 +30,10 @@ class _CoreContainerState extends ConsumerState<CoreManager>
     with CoreEventListener {
   CoreController get _core => ref.read(coreHandlerProvider);
 
+  late final TrafficAccountant _trafficAccountant;
+
+  Timer? _trafficTicker;
+
   @override
   Widget build(BuildContext context) {
     return widget.child;
@@ -36,6 +42,17 @@ class _CoreContainerState extends ConsumerState<CoreManager>
   @override
   void initState() {
     super.initState();
+    _trafficAccountant = TrafficAccountant(
+      lookupProfile: () {
+        final profileId = ref.read(currentProfileIdProvider);
+        if (profileId == null) {
+          return null;
+        }
+        final profile = ref.read(profilesProvider).getProfile(profileId);
+        return (id: profileId, name: profile?.realLabel ?? '');
+      },
+      sink: (deltas) => database.trafficStatsDao.accumulate(deltas),
+    );
     coreEventManager.addListener(this);
     ref.read(updatingActionProvider.notifier);
     // A rejected profile stays selected on purpose: silently reverting to
@@ -95,6 +112,26 @@ class _CoreContainerState extends ConsumerState<CoreManager>
         _syncLogStream();
       }
     }, fireImmediately: true);
+    _trafficTicker = Timer.periodic(
+      trafficAccountingFlushInterval,
+      (_) => unawaited(_trafficTick()),
+    );
+  }
+
+  Future<void> _trafficTick() async {
+    if (ref.read(coreStatusProvider) == CoreStatus.connected) {
+      try {
+        final live = await _core.getConnectionsWith(
+          (connections) => {
+            for (final connection in connections) connection.id,
+          },
+        );
+        _trafficAccountant.pruneClosed(live);
+      } catch (_) {
+        // A core lost mid-tick only delays pruning by one interval.
+      }
+    }
+    await _trafficAccountant.flush();
   }
 
   void _syncLogStream() {
@@ -111,6 +148,8 @@ class _CoreContainerState extends ConsumerState<CoreManager>
   @override
   void dispose() {
     coreEventManager.removeListener(this);
+    _trafficTicker?.cancel();
+    unawaited(_trafficAccountant.flush());
     super.dispose();
   }
 
@@ -154,6 +193,7 @@ class _CoreContainerState extends ConsumerState<CoreManager>
 
   @override
   void onRequest(TrackerInfo trackerInfo) async {
+    _trafficAccountant.observeOpen(trackerInfo);
     ref.read(requestsProvider.notifier).addRequest(trackerInfo);
     ref.read(requestCountProvider.notifier).update((count) => count + 1);
     super.onRequest(trackerInfo);
@@ -161,6 +201,7 @@ class _CoreContainerState extends ConsumerState<CoreManager>
 
   @override
   void onRequestTraffic(Map<String, RequestTraffic> traffic) {
+    _trafficAccountant.observeTraffic(traffic);
     ref.read(requestsProvider.notifier).updateTraffic(traffic);
     super.onRequestTraffic(traffic);
   }

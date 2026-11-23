@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/l10n/l10n.dart';
+import 'package:fl_clash/manager/traffic_accounting.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -42,10 +47,116 @@ List<SubscriptionTraffic> airportSubscriptionTrafficsOf(
   return (reported: reported, used: used, total: total);
 }
 
-class TrafficStatsView extends ConsumerWidget {
+String trafficUpDownLabel(AppLocalizations appLocalizations, int up, int down) {
+  return '${appLocalizations.upload} ${up.traffic.show}  '
+      '${appLocalizations.download} ${down.traffic.show}';
+}
+
+class TrafficStatsView extends ConsumerStatefulWidget {
   const TrafficStatsView({super.key});
 
-  void _showDetail(BuildContext context, SubscriptionTraffic item) {
+  @override
+  ConsumerState<TrafficStatsView> createState() => _TrafficStatsViewState();
+}
+
+class _TrafficStatsViewState extends ConsumerState<TrafficStatsView> {
+  Timer? _refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshTimer = Timer.periodic(trafficAccountingFlushInterval, (_) {
+      if (!mounted) {
+        return;
+      }
+      ref.invalidate(trafficDaysProvider);
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  void _showDayDetail(String statDate) {
+    showNestedSheet<void>(
+      context,
+      builder: (_) => _TrafficDaySheet(statDate: statDate),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    final days = ref.watch(trafficDaysProvider).value ?? const [];
+    final items = airportSubscriptionTrafficsOf(ref.watch(profilesProvider));
+    final summary = subscriptionTrafficSummaryOf(items);
+    return Scaffold(
+      title: appLocalizations.trafficUsage,
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+              top: context.sectionsTopPadding,
+              bottom: 16 + context.bottomInset,
+            ),
+            sliver: SliverMainAxisGroup(
+              slivers: [
+                if (days.isEmpty)
+                  SliverToBoxAdapter(
+                    child: NullStatus(
+                      label: appLocalizations.nullTip(
+                        appLocalizations.measuredTraffic,
+                      ),
+                      illustration: NullStatusIllustration.data,
+                    ),
+                  )
+                else
+                  generateSliverSection(
+                    title: appLocalizations.measuredTraffic,
+                    items: days,
+                    itemBuilder: (day) => DecorationListItem(
+                      onPressed: () => _showDayDetail(day.statDate),
+                      title: Text(day.statDate),
+                      subtitle: Text(
+                        trafficUpDownLabel(appLocalizations, day.up, day.down),
+                      ),
+                      trailing: Text((day.up + day.down).traffic.show),
+                    ),
+                  ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12, bottom: 12),
+                    child: Text(
+                      appLocalizations.measuredTrafficNote,
+                      style: AppTextStyle.footnote
+                          .of(context)
+                          .copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(child: _TrafficSummary(summary: summary)),
+                generateSliverSection(
+                  title: appLocalizations.subscriptionInfo,
+                  items: items,
+                  itemBuilder: (item) => _SubscriptionTrafficItem(
+                    item,
+                    key: ValueKey(item.profile.id),
+                    onTap: () => _showQuotaDetail(context, item),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showQuotaDetail(BuildContext context, SubscriptionTraffic item) {
     showNestedSheet<void>(
       context,
       builder: (_) => Scaffold(
@@ -66,44 +177,121 @@ class TrafficStatsView extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _TrafficDaySheet extends ConsumerWidget {
+  final String statDate;
+
+  const _TrafficDaySheet({required this.statDate});
+
+  void _showHosts(
+    BuildContext context,
+    WidgetRef ref,
+    TrafficProfileTotal profile,
+  ) {
+    showNestedSheet<void>(
+      context,
+      builder: (_) => _TrafficHostSheet(
+        statDate: statDate,
+        profileId: profile.profileId,
+        profileName: profile.profileName,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
-    final items = airportSubscriptionTrafficsOf(ref.watch(profilesProvider));
-    final summary = subscriptionTrafficSummaryOf(items);
+    final profiles =
+        ref.watch(trafficDayProfilesProvider(statDate)).value ?? const [];
     return Scaffold(
-      title: appLocalizations.trafficUsage,
-      body: NullStatusSwitcher(
-        isEmpty: items.isEmpty,
-        nullStatus: NullStatus(
-          label: appLocalizations.nullTip(appLocalizations.trafficUsage),
-          illustration: NullStatusIllustration.data,
-        ),
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
-                top: context.sectionsTopPadding,
-                bottom: 16 + context.bottomInset,
-              ),
-              sliver: SliverMainAxisGroup(
-                slivers: [
-                  SliverToBoxAdapter(child: _TrafficSummary(summary: summary)),
-                  generateSliverSection(
-                    title: appLocalizations.subscriptionInfo,
-                    items: items,
-                    itemBuilder: (item) => _SubscriptionTrafficItem(
-                      item,
-                      key: ValueKey(item.profile.id),
-                      onTap: () => _showDetail(context, item),
-                    ),
+      title: statDate,
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+              top: context.contentTopPadding,
+              bottom: 20 + context.bottomInset,
+            ),
+            sliver: generateSliverSection(
+              title: appLocalizations.subscriptionInfo,
+              items: profiles,
+              itemBuilder: (profile) => DecorationListItem(
+                onPressed: () => _showHosts(context, ref, profile),
+                title: Text(
+                  profile.profileName.isEmpty
+                      ? appLocalizations.unknown
+                      : profile.profileName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  trafficUpDownLabel(
+                    appLocalizations,
+                    profile.up,
+                    profile.down,
                   ),
-                ],
+                ),
+                trailing: Text((profile.up + profile.down).traffic.show),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrafficHostSheet extends ConsumerWidget {
+  final String statDate;
+  final int profileId;
+  final String profileName;
+
+  const _TrafficHostSheet({
+    required this.statDate,
+    required this.profileId,
+    required this.profileName,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final hosts =
+        ref
+            .watch(
+              trafficDayHostsProvider((
+                statDate: statDate,
+                profileId: profileId,
+              )),
+            )
+            .value ??
+        const [];
+    return Scaffold(
+      title: profileName.isEmpty ? statDate : profileName,
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+              top: context.contentTopPadding,
+              bottom: 20 + context.bottomInset,
+            ),
+            sliver: generateSliverSection(
+              title: appLocalizations.destinations,
+              items: hosts,
+              itemBuilder: (host) => DecorationListItem(
+                title: Text(
+                  host.destKey,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  trafficUpDownLabel(appLocalizations, host.up, host.down),
+                ),
+                trailing: Text((host.up + host.down).traffic.show),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

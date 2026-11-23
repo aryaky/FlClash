@@ -180,6 +180,24 @@ abstract class AppLocalizations {
   /// **'Traffic usage'**
   String get trafficUsage;
 
+  /// No description provided for @measuredTraffic.
+  ///
+  /// In en, this message translates to:
+  /// **'Measured traffic'**
+  String get measuredTraffic;
+
+  /// No description provided for @measuredTrafficNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only traffic that passed through this device\'s core is counted, accumulated since this version was installed. Airport bills may differ because of core overhead or other devices — that difference is exactly what reconciliation reveals.'**
+  String get measuredTrafficNote;
+
+  /// No description provided for @destinations.
+  ///
+  /// In en, this message translates to:
+  /// **'Destinations'**
+  String get destinations;
+
   /// No description provided for @networkSpeed.
   ///
   /// In en, this message translates to:
