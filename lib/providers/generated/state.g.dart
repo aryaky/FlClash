@@ -4039,55 +4039,102 @@ final class TrafficDayProfilesFamily extends $Family
   String toString() => r'trafficDayProfilesProvider';
 }
 
-@ProviderFor(trafficDayHosts)
-final trafficDayHostsProvider = TrafficDayHostsFamily._();
+@ProviderFor(domainGrouper)
+final domainGrouperProvider = DomainGrouperProvider._();
 
-final class TrafficDayHostsProvider
+final class DomainGrouperProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<TrafficHostTotal>>,
-          List<TrafficHostTotal>,
-          FutureOr<List<TrafficHostTotal>>
+          AsyncValue<DomainGrouper>,
+          DomainGrouper,
+          FutureOr<DomainGrouper>
+        >
+    with $FutureModifier<DomainGrouper>, $FutureProvider<DomainGrouper> {
+  DomainGrouperProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'domainGrouperProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$domainGrouperHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<DomainGrouper> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<DomainGrouper> create(Ref ref) {
+    return domainGrouper(ref);
+  }
+}
+
+String _$domainGrouperHash() => r'c474b58e18809449548e44e949104b97c38a3149';
+
+/// Exact hosts of one day and profile, bucketed by registrable domain so the
+/// sheet can show one row per domain and still drill into the hosts beneath.
+
+@ProviderFor(trafficDayDomainHosts)
+final trafficDayDomainHostsProvider = TrafficDayDomainHostsFamily._();
+
+/// Exact hosts of one day and profile, bucketed by registrable domain so the
+/// sheet can show one row per domain and still drill into the hosts beneath.
+
+final class TrafficDayDomainHostsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Map<String, List<TrafficHostTotal>>>,
+          Map<String, List<TrafficHostTotal>>,
+          FutureOr<Map<String, List<TrafficHostTotal>>>
         >
     with
-        $FutureModifier<List<TrafficHostTotal>>,
-        $FutureProvider<List<TrafficHostTotal>> {
-  TrafficDayHostsProvider._({
-    required TrafficDayHostsFamily super.from,
+        $FutureModifier<Map<String, List<TrafficHostTotal>>>,
+        $FutureProvider<Map<String, List<TrafficHostTotal>>> {
+  /// Exact hosts of one day and profile, bucketed by registrable domain so the
+  /// sheet can show one row per domain and still drill into the hosts beneath.
+  TrafficDayDomainHostsProvider._({
+    required TrafficDayDomainHostsFamily super.from,
     required ({int profileId, String statDate}) super.argument,
   }) : super(
          retry: null,
-         name: r'trafficDayHostsProvider',
+         name: r'trafficDayDomainHostsProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$trafficDayHostsHash();
+  String debugGetCreateSourceHash() => _$trafficDayDomainHostsHash();
 
   @override
   String toString() {
-    return r'trafficDayHostsProvider'
+    return r'trafficDayDomainHostsProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  $FutureProviderElement<List<TrafficHostTotal>> $createElement(
+  $FutureProviderElement<Map<String, List<TrafficHostTotal>>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<TrafficHostTotal>> create(Ref ref) {
+  FutureOr<Map<String, List<TrafficHostTotal>>> create(Ref ref) {
     final argument = this.argument as ({int profileId, String statDate});
-    return trafficDayHosts(ref, argument);
+    return trafficDayDomainHosts(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TrafficDayHostsProvider && other.argument == argument;
+    return other is TrafficDayDomainHostsProvider && other.argument == argument;
   }
 
   @override
@@ -4096,26 +4143,33 @@ final class TrafficDayHostsProvider
   }
 }
 
-String _$trafficDayHostsHash() => r'76b61739a620f35f5b127f58c10bf26c9ed33fc5';
+String _$trafficDayDomainHostsHash() =>
+    r'e29a177f93e3770626ce1b7d7c82e2604c61d3bc';
 
-final class TrafficDayHostsFamily extends $Family
+/// Exact hosts of one day and profile, bucketed by registrable domain so the
+/// sheet can show one row per domain and still drill into the hosts beneath.
+
+final class TrafficDayDomainHostsFamily extends $Family
     with
         $FunctionalFamilyOverride<
-          FutureOr<List<TrafficHostTotal>>,
+          FutureOr<Map<String, List<TrafficHostTotal>>>,
           ({int profileId, String statDate})
         > {
-  TrafficDayHostsFamily._()
+  TrafficDayDomainHostsFamily._()
     : super(
         retry: null,
-        name: r'trafficDayHostsProvider',
+        name: r'trafficDayDomainHostsProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  TrafficDayHostsProvider call(({int profileId, String statDate}) key) =>
-      TrafficDayHostsProvider._(argument: key, from: this);
+  /// Exact hosts of one day and profile, bucketed by registrable domain so the
+  /// sheet can show one row per domain and still drill into the hosts beneath.
+
+  TrafficDayDomainHostsProvider call(({int profileId, String statDate}) key) =>
+      TrafficDayDomainHostsProvider._(argument: key, from: this);
 
   @override
-  String toString() => r'trafficDayHostsProvider';
+  String toString() => r'trafficDayDomainHostsProvider';
 }

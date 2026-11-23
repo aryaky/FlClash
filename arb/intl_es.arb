@@ -12,7 +12,7 @@
   "resources": "Recursos",
   "trafficUsage": "Uso de tráfico",
   "measuredTraffic": "Tráfico medido",
-  "measuredTrafficNote": "Solo se cuenta el tráfico que pasó por el core de este dispositivo, acumulado desde la instalación de esta versión. Las facturas del proveedor pueden diferir por la sobrecarga del core o por otros dispositivos: esa diferencia es justamente lo que muestra la conciliación.",
+  "measuredTrafficNote": "Solo se cuenta el tráfico que pasó por el core de este dispositivo, acumulado desde la instalación de esta versión. Las facturas del proveedor pueden diferir por la sobrecarga del core o por otros dispositivos: esa diferencia es justamente lo que muestra la conciliación. Los hostings se agrupan por dominio registrable (eTLD+1); abre un dominio para ver sus hosts exactos.",
   "destinations": "Destinos",
   "networkSpeed": "Velocidad de red",
   "outboundMode": "Modo de salida",

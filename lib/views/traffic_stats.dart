@@ -184,14 +184,10 @@ class _TrafficDaySheet extends ConsumerWidget {
 
   const _TrafficDaySheet({required this.statDate});
 
-  void _showHosts(
-    BuildContext context,
-    WidgetRef ref,
-    TrafficProfileTotal profile,
-  ) {
+  void _showDomains(BuildContext context, TrafficProfileTotal profile) {
     showNestedSheet<void>(
       context,
-      builder: (_) => _TrafficHostSheet(
+      builder: (_) => _TrafficDomainSheet(
         statDate: statDate,
         profileId: profile.profileId,
         profileName: profile.profileName,
@@ -217,7 +213,7 @@ class _TrafficDaySheet extends ConsumerWidget {
               title: appLocalizations.subscriptionInfo,
               items: profiles,
               itemBuilder: (profile) => DecorationListItem(
-                onPressed: () => _showHosts(context, ref, profile),
+                onPressed: () => _showDomains(context, profile),
                 title: Text(
                   profile.profileName.isEmpty
                       ? appLocalizations.unknown
@@ -242,12 +238,12 @@ class _TrafficDaySheet extends ConsumerWidget {
   }
 }
 
-class _TrafficHostSheet extends ConsumerWidget {
+class _TrafficDomainSheet extends ConsumerWidget {
   final String statDate;
   final int profileId;
   final String profileName;
 
-  const _TrafficHostSheet({
+  const _TrafficDomainSheet({
     required this.statDate,
     required this.profileId,
     required this.profileName,
@@ -256,16 +252,24 @@ class _TrafficHostSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
-    final hosts =
+    final grouped =
         ref
             .watch(
-              trafficDayHostsProvider((
+              trafficDayDomainHostsProvider((
                 statDate: statDate,
                 profileId: profileId,
               )),
             )
             .value ??
-        const [];
+        const <String, List<TrafficHostTotal>>{};
+    final domains = [
+      for (final MapEntry(key: domain, value: hosts) in grouped.entries)
+        (
+          domain: domain,
+          up: hosts.fold(0, (sum, host) => sum + host.up),
+          down: hosts.fold(0, (sum, host) => sum + host.down),
+        ),
+    ]..sort((a, b) => (b.up + b.down).compareTo(a.up + a.down));
     return Scaffold(
       title: profileName.isEmpty ? statDate : profileName,
       body: CustomScrollView(
@@ -277,6 +281,52 @@ class _TrafficHostSheet extends ConsumerWidget {
             ),
             sliver: generateSliverSection(
               title: appLocalizations.destinations,
+              items: domains,
+              itemBuilder: (domain) => DecorationListItem(
+                onPressed: () => showNestedSheet<void>(
+                  context,
+                  builder: (_) => _TrafficHostSheet(
+                    domain: domain.domain,
+                    hosts: grouped[domain.domain] ?? const [],
+                  ),
+                ),
+                title: Text(
+                  domain.domain,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  trafficUpDownLabel(appLocalizations, domain.up, domain.down),
+                ),
+                trailing: Text((domain.up + domain.down).traffic.show),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrafficHostSheet extends StatelessWidget {
+  final String domain;
+  final List<TrafficHostTotal> hosts;
+
+  const _TrafficHostSheet({required this.domain, required this.hosts});
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    return Scaffold(
+      title: appLocalizations.details(domain),
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+              top: context.contentTopPadding,
+              bottom: 20 + context.bottomInset,
+            ),
+            sliver: generateSliverSection(
               items: hosts,
               itemBuilder: (host) => DecorationListItem(
                 title: Text(

@@ -49,7 +49,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get measuredTrafficNote =>
-      'このデバイスの core を通過したトラフィックのみを、このバージョンのインストール以降累計しています。core のオーバーヘッドや他端末の利用によりプロバイダの請求と差異が出ることがあります。その差異を確認することが照合の目的です。';
+      'このデバイスの core を通過したトラフィックのみを、このバージョンのインストール以降累計しています。core のオーバーヘッドや他端末の利用によりプロバイダの請求と差異が出ることがあります。その差異を確認することが照合の目的です。ホストは登録可能ドメイン（eTLD+1）単位でグループ化され、開くと正確なホストを表示します。';
 
   @override
   String get destinations => '接続先';

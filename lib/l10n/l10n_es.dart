@@ -49,7 +49,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get measuredTrafficNote =>
-      'Solo se cuenta el tráfico que pasó por el core de este dispositivo, acumulado desde la instalación de esta versión. Las facturas del proveedor pueden diferir por la sobrecarga del core o por otros dispositivos: esa diferencia es justamente lo que muestra la conciliación.';
+      'Solo se cuenta el tráfico que pasó por el core de este dispositivo, acumulado desde la instalación de esta versión. Las facturas del proveedor pueden diferir por la sobrecarga del core o por otros dispositivos: esa diferencia es justamente lo que muestra la conciliación. Los hostings se agrupan por dominio registrable (eTLD+1); abre un dominio para ver sus hosts exactos.';
 
   @override
   String get destinations => 'Destinos';

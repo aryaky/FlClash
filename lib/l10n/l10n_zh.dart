@@ -49,7 +49,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get measuredTrafficNote =>
-      '只统计流经本机 core 的流量，自安装本版本起累计；与机场账单的差异来自 core 自身开销、其他设备共用订阅等——这正是对账的意义。';
+      '只统计流经本机 core 的流量，自安装本版本起累计；与机场账单的差异来自 core 自身开销、其他设备共用订阅等——这正是对账的意义。站点按主域名（eTLD+1）归组，点开可见精确 host。';
 
   @override
   String get destinations => '目标站点';

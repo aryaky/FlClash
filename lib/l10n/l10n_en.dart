@@ -49,7 +49,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get measuredTrafficNote =>
-      'Only traffic that passed through this device\'s core is counted, accumulated since this version was installed. Airport bills may differ because of core overhead or other devices — that difference is exactly what reconciliation reveals.';
+      'Only traffic that passed through this device\'s core is counted, accumulated since this version was installed. Airport bills may differ because of core overhead or other devices — that difference is exactly what reconciliation reveals. Hosts are grouped by registrable domain (eTLD+1); open a domain to see its exact hosts.';
 
   @override
   String get destinations => 'Destinations';

@@ -49,7 +49,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get measuredTrafficNote =>
-      '이 기기의 core를 통과한 트래픽만 이 버전 설치 이후부터 누적 집계됩니다. core 오버헤드나 다른 기기 사용으로 공항 청구서와 차이가 날 수 있으며, 그 차이를 확인하는 것이 대조의 목적입니다.';
+      '이 기기의 core를 통과한 트래픽만 이 버전 설치 이후부터 누적 집계됩니다. core 오버헤드나 다른 기기 사용으로 공항 청구서와 차이가 날 수 있으며, 그 차이를 확인하는 것이 대조의 목적입니다.호스트는 등록 가능 도메인(eTLD+1) 기준으로 묶이며, 열면 정확한 호스트를 볼 수 있습니다.';
 
   @override
   String get destinations => '대상 사이트';
