@@ -27,9 +27,9 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>clash</string>
-				<string>clashmeta</string>
-				<string>flclash</string>
+				<string>clashtest</string>
+				<string>clashmetatest</string>
+				<string>flclashtest</string>
 			</array>
 		</dict>
 	</array>

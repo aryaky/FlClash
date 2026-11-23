@@ -186,7 +186,7 @@ mod tests {
 
     #[test]
     fn finds_the_process_on_the_client_end_of_the_connection() {
-        let server = address(47890);
+        let server = address(47899);
         let client = address(50123);
         let connections = [
             TcpConnection {
@@ -211,7 +211,7 @@ mod tests {
 
     #[test]
     fn finds_nobody_when_the_connection_is_gone_or_unowned() {
-        let server = address(47890);
+        let server = address(47899);
         let client = address(50123);
         let helper_end_only = [TcpConnection {
             local: server,

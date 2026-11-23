@@ -1,19 +1,19 @@
-display_name: FlClash
+display_name: FlClashTest
 
 icon: ./assets/images/icon.png
 
 supported_mime_type:
-  - x-scheme-handler/clash
-  - x-scheme-handler/clashmeta
-  - x-scheme-handler/flclash
+  - x-scheme-handler/clashtest
+  - x-scheme-handler/clashmetatest
+  - x-scheme-handler/flclashtest
 
 keywords:
-  - FlClash
+  - FlClashTest
   - Clash
   - ClashMeta
   - Proxy
 
-generic_name: FlClash
+generic_name: FlClashTest
 
 categories:
   - Network
