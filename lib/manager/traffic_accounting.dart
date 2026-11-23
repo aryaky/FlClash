@@ -67,7 +67,6 @@ class TrafficAccountant {
   final TrafficClock now;
 
   final Map<String, _TrackedConnection> _connections = {};
-  final Map<String, ({int up, int down})> _untracked = {};
   final Map<_BucketKey, ({int up, int down, String profileName})> _pending = {};
 
   static final RegExp _portSuffix = RegExp(r':\d+$');
@@ -100,7 +99,6 @@ class TrafficAccountant {
     if (_connections.containsKey(info.id)) {
       return;
     }
-    _untracked.remove(info.id);
     final profile = lookupProfile();
     if (profile == null) {
       return;
@@ -118,7 +116,6 @@ class TrafficAccountant {
     for (final MapEntry(key: id, value: counters) in traffic.entries) {
       final connection = _connections[id];
       if (connection == null) {
-        _untracked[id] = (up: counters.upload, down: counters.download);
         continue;
       }
       final up = counters.upload - connection.up;
@@ -144,25 +141,38 @@ class TrafficAccountant {
 
   void pruneClosed(Set<String> liveIds) {
     _connections.removeWhere((id, _) => !liveIds.contains(id));
-    _untracked.removeWhere((id, _) => !liveIds.contains(id));
   }
 
   Future<void> flush() async {
     if (_pending.isEmpty) {
       return;
     }
-    final drained = _pending.entries.toList();
+    final drained = Map.of(_pending);
     _pending.clear();
-    await sink([
-      for (final MapEntry(key: key, value: amount) in drained)
-        TrafficStatRecord(
-          statDate: key.date,
-          profileId: key.profileId,
-          destKey: key.destKey,
+    try {
+      await sink([
+        for (final MapEntry(key: key, value: amount) in drained.entries)
+          TrafficStatRecord(
+            statDate: key.date,
+            profileId: key.profileId,
+            destKey: key.destKey,
+            profileName: amount.profileName,
+            up: amount.up,
+            down: amount.down,
+          ),
+      ]);
+    } catch (_) {
+      // A failed write must not cost the increments; merge them back under
+      // anything observed meanwhile and retry on the next flush.
+      for (final MapEntry(key: key, value: amount) in drained.entries) {
+        final current = _pending[key] ?? (up: 0, down: 0, profileName: '');
+        _pending[key] = (
+          up: current.up + amount.up,
+          down: current.down + amount.down,
           profileName: amount.profileName,
-          up: amount.up,
-          down: amount.down,
-        ),
-    ]);
+        );
+      }
+      rethrow;
+    }
   }
 }

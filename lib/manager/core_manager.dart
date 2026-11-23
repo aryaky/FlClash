@@ -131,7 +131,14 @@ class _CoreContainerState extends ConsumerState<CoreManager>
         // A core lost mid-tick only delays pruning by one interval.
       }
     }
-    await _trafficAccountant.flush();
+    try {
+      await _trafficAccountant.flush();
+    } catch (error, stackTrace) {
+      commonPrint.log(
+        'Traffic stats flush failed: ${compactError(error)}, $stackTrace',
+        logLevel: LogLevel.warning,
+      );
+    }
   }
 
   void _syncLogStream() {
@@ -149,7 +156,11 @@ class _CoreContainerState extends ConsumerState<CoreManager>
   void dispose() {
     coreEventManager.removeListener(this);
     _trafficTicker?.cancel();
-    unawaited(_trafficAccountant.flush());
+    unawaited(
+      _trafficAccountant.flush().catchError((Object _) {
+        // Shutdown write failures merge back into a map that dies with it.
+      }),
+    );
     super.dispose();
   }
 

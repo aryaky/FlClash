@@ -176,5 +176,28 @@ void main() {
       expect(flushed.single.up, 150);
       expect(flushed.single.down, 25);
     });
+
+    test('a failed write keeps the increments for the next flush', () async {
+      var writable = false;
+      final subject = TrafficAccountant(
+        lookupProfile: () => (id: 7, name: 'Airport A'),
+        sink: (records) async {
+          if (!writable) {
+            throw StateError('database locked');
+          }
+          flushed.addAll(records);
+        },
+        now: () => now,
+      );
+      subject.observeOpen(_conn('a', host: 'github.com'));
+      subject.observeTraffic({'a': (upload: 100, download: 0)});
+      await expectLater(subject.flush(), throwsStateError);
+      subject.observeTraffic({'a': (upload: 180, download: 0)});
+      writable = true;
+      await subject.flush();
+
+      expect(flushed.length, 1);
+      expect(flushed.single.up, 180);
+    });
   });
 }
