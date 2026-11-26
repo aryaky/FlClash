@@ -53,6 +53,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get destinations => 'Destinations';
+  @override
   String get buildDate => 'Build date';
 
   @override

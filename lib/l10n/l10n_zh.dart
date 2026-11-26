@@ -53,6 +53,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get destinations => '目标站点';
+  @override
   String get buildDate => '编译日期';
 
   @override
