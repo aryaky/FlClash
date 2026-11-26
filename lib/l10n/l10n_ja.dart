@@ -53,6 +53,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get destinations => '接続先';
+  String get buildDate => 'ビルド日時';
 
   @override
   String get networkSpeed => 'ネットワーク速度';

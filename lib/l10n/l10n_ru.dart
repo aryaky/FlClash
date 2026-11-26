@@ -53,6 +53,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get destinations => 'Назначения';
+  String get buildDate => 'Дата сборки';
 
   @override
   String get networkSpeed => 'Скорость сети';

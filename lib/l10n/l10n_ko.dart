@@ -53,6 +53,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get destinations => '대상 사이트';
+  String get buildDate => '빌드 날짜';
 
   @override
   String get networkSpeed => '네트워크 속도';

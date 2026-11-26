@@ -201,6 +201,14 @@ class _AboutHero extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 6),
+          Text(
+            '${appLocalizations.buildDate}  $buildDate',
+            textAlign: TextAlign.center,
+            style: AppTextStyle.footnote
+                .of(context)
+                .copyWith(color: colorScheme.onSurfaceVariant),
+          ),
           const SizedBox(height: 16),
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),

@@ -198,6 +198,12 @@ abstract class AppLocalizations {
   /// **'Destinations'**
   String get destinations;
 
+  /// No description provided for @buildDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Build date'**
+  String get buildDate;
+
   /// No description provided for @networkSpeed.
   ///
   /// In en, this message translates to:

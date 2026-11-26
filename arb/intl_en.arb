@@ -14,6 +14,7 @@
   "measuredTraffic": "Measured traffic",
   "measuredTrafficNote": "Only traffic that passed through this device's core is counted, accumulated since this version was installed. Airport bills may differ because of core overhead or other devices — that difference is exactly what reconciliation reveals. Hosts are grouped by registrable domain (eTLD+1); open a domain to see its exact hosts.",
   "destinations": "Destinations",
+  "buildDate": "Build date",
   "networkSpeed": "Network speed",
   "outboundMode": "Outbound mode",
   "serviceStatus": "Service status",

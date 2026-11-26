@@ -92,6 +92,21 @@ void main() {
         ],
       );
     });
+
+    test('injects the build date as a dart define when given', () {
+      expect(
+        package.flutterBuildArguments(
+          _context(ReleaseOs.windows),
+          verbose: false,
+          buildDate: '2026-11-26 03:15 UTC',
+        ),
+        contains('--dart-define=BUILD_DATE=2026-11-26 03:15 UTC'),
+      );
+      expect(
+        package.utcBuildDateOf(DateTime.utc(2026, 11, 26, 3, 5)),
+        '2026-11-26 03:05 UTC',
+      );
+    });
   });
 
   test('refuses to package while a native build hook is skipped', () {

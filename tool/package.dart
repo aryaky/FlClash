@@ -128,10 +128,18 @@ List<String> packagesNotBuildingAssets(String pubspec) {
   ]..sort();
 }
 
+String utcBuildDateOf(DateTime time) {
+  final utc = time.toUtc();
+  String pad(int value) => value.toString().padLeft(2, '0');
+  return '${utc.year.toString().padLeft(4, '0')}-${pad(utc.month)}-${pad(utc.day)} '
+      '${pad(utc.hour)}:${pad(utc.minute)} UTC';
+}
+
 List<String> flutterBuildArguments(
   PackageContext context, {
   List<ReleaseArch> androidArches = const [],
   required bool verbose,
+  String? buildDate,
 }) {
   final android = context.os == ReleaseOs.android;
   final split = androidArches.where((arch) => arch != ReleaseArch.universal);
@@ -139,6 +147,7 @@ List<String> flutterBuildArguments(
     'build',
     if (android) 'apk' else context.os.name,
     '--dart-define-from-file=env.json',
+    if (buildDate != null) '--dart-define=BUILD_DATE=$buildDate',
     if (android && split.isNotEmpty) ...[
       '--split-per-abi',
       '--target-platform',
@@ -175,6 +184,7 @@ List<Step> planBuild(
   final splitArches = androidArches
       .where((arch) => arch != ReleaseArch.universal)
       .toList();
+  final buildDate = utcBuildDateOf(DateTime.now());
   if (context.os != ReleaseOs.android || splitArches.isNotEmpty) {
     steps.add(
       Command(
@@ -183,6 +193,7 @@ List<Step> planBuild(
           context,
           androidArches: splitArches,
           verbose: verbose,
+          buildDate: buildDate,
         ),
         workingDirectory: context.root,
       ),
@@ -192,7 +203,7 @@ List<Step> planBuild(
     steps.add(
       Command(
         'flutter',
-        flutterBuildArguments(context, verbose: verbose),
+        flutterBuildArguments(context, verbose: verbose, buildDate: buildDate),
         workingDirectory: context.root,
       ),
     );

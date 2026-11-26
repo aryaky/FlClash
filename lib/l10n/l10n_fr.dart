@@ -53,6 +53,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get destinations => 'Destinations';
+  String get buildDate => 'Date de compilation';
 
   @override
   String get networkSpeed => 'Débit réseau';
