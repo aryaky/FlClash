@@ -53,6 +53,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get destinations => 'Назначения';
+
+  @override
   String get buildDate => 'Дата сборки';
 
   @override
