@@ -11,6 +11,7 @@ class Navigation implements NavigationPort {
   List<NavigationItem> getItems({
     bool openLogs = false,
     bool hasProxies = false,
+    bool capturing = false,
   }) {
     return [
       NavigationItem(
@@ -27,6 +28,14 @@ class Navigation implements NavigationPort {
             : [],
       ),
       NavigationItem(
+        glyph: AppGlyphs.requests,
+        label: PageLabel.requests,
+        builder: (_) => const RequestsView(),
+        modes: capturing
+            ? [NavigationItemMode.desktop, NavigationItemMode.mobile]
+            : [NavigationItemMode.desktop, NavigationItemMode.moreFull],
+      ),
+      NavigationItem(
         glyph: AppGlyphs.profiles,
         label: PageLabel.profiles,
         builder: (_) => const ProfilesView(),
@@ -35,18 +44,6 @@ class Navigation implements NavigationPort {
         glyph: AppGlyphs.radar,
         label: PageLabel.trafficStats,
         builder: (_) => const TrafficStatsView(),
-      ),
-      NavigationItem(
-        glyph: AppGlyphs.requests,
-        label: PageLabel.requests,
-        builder: (_) => const RequestsView(),
-        modes: [NavigationItemMode.desktop, NavigationItemMode.moreFull],
-      ),
-      NavigationItem(
-        glyph: AppGlyphs.dns,
-        label: PageLabel.dns,
-        builder: (_) => const DnsQueriesView(),
-        modes: [NavigationItemMode.moreFull],
       ),
       NavigationItem(
         glyph: AppGlyphs.resources,
@@ -58,9 +55,7 @@ class Navigation implements NavigationPort {
         glyph: AppGlyphs.logs,
         label: PageLabel.logs,
         builder: (_) => const LogsView(),
-        modes: openLogs
-            ? [NavigationItemMode.desktop, NavigationItemMode.more]
-            : [],
+        modes: openLogs ? [NavigationItemMode.more] : [],
       ),
       NavigationItem(
         glyph: AppGlyphs.tools,
