@@ -43,6 +43,7 @@ void main() {
         PageLabel.proxies,
         PageLabel.requests,
         PageLabel.profiles,
+        PageLabel.trafficStats,
         PageLabel.tools,
       ]);
     }
@@ -64,6 +65,7 @@ void main() {
       PageLabel.dashboard,
       PageLabel.proxies,
       PageLabel.profiles,
+      PageLabel.trafficStats,
       PageLabel.tools,
     ]);
     expect(
@@ -76,6 +78,7 @@ void main() {
       PageLabel.proxies,
       PageLabel.requests,
       PageLabel.profiles,
+      PageLabel.trafficStats,
       PageLabel.tools,
     ]);
     expect(
