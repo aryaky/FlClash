@@ -53,6 +53,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get destinations => 'Destinos';
+
   @override
   String get buildDate => 'Fecha de compilación';
 
